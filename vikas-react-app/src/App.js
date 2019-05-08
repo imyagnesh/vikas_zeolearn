@@ -1,26 +1,21 @@
-import React from "react";
-import logo from "./logo.svg";
-import "./App.css";
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import * as xyz from "./appStyle";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+export default class App extends Component {
+  static propTypes = {
+    text: PropTypes.string.isRequired,
+    body: PropTypes.string.isRequired
+  };
+
+  render() {
+    const { text, body } = this.props;
+    console.log(xyz.a);
+    return (
+      <div>
+        <p>{text}</p>
+        <p>{body}</p>
+      </div>
+    );
+  }
 }
-
-export default App;
