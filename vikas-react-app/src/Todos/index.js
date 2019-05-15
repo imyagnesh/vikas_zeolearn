@@ -1,10 +1,11 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 import TodoForm from "./todoForm";
 import TodoList from "./todoList";
 import FilterTodo from "./filterTodo";
+import ErrorBoundary from "../ErrorBoundary";
 
-class index extends Component {
+class index extends PureComponent {
   state = {
     todos: [],
     todoText: "",
@@ -29,7 +30,10 @@ class index extends Component {
   // }
 
   // shouldComponentUpdate(nextProps, nextState, nextContext) {
-  //   return true;
+  //   if (JSON.stringify(this.props) !== JSON.stringify(nextProps)) {
+  //     return true;
+  //   }
+  //   return false;
   // }
 
   // getSnapshotBeforeUpdate(prevProps, prevState) {
@@ -65,6 +69,8 @@ class index extends Component {
   // }
 
   // componentDidCatch(error, info) {}
+
+  componentWillMount() {}
 
   getData = async () => {
     const res = await fetch("http://localhost:3004/todos");
@@ -102,7 +108,8 @@ class index extends Component {
     }
   };
 
-  deleteTodo = async id => {
+  deleteTodo = async (id, info) => {
+    console.log(info);
     const { todos } = this.state;
     const res = await fetch(`http://localhost:3004/todos/${id}`, {
       method: "DELETE"
@@ -153,35 +160,38 @@ class index extends Component {
       data = todos.filter(x => x.isDone);
     }
 
+    console.log(this.props.isOnline);
     return (
-      <div
-        style={{
-          height: "100vh",
-          flexDirection: "column",
-          display: "flex",
-          justifyContent: "flex-end"
-        }}
-      >
-        {/* <input
+      <ErrorBoundary>
+        <div
+          style={{
+            height: "100vh",
+            flexDirection: "column",
+            display: "flex",
+            justifyContent: "flex-end"
+          }}
+        >
+          {/* <input
           ref={ref => {
             this.inputText = ref;
           }}
           type="text"
         /> */}
-        <div style={{ display: "flex", flex: 1, flexDirection: "column" }}>
-          <TodoForm
-            todoText={todoText}
-            submit={this.submit}
-            onChange={this.onChange}
-          />
-          <TodoList
-            data={data}
-            updateTodo={this.updateTodo}
-            deleteTodo={this.deleteTodo}
-          />
+          <div style={{ display: "flex", flex: 1, flexDirection: "column" }}>
+            <TodoForm
+              todoText={todoText}
+              submit={this.submit}
+              onChange={this.onChange}
+            />
+            <TodoList
+              data={data}
+              updateTodo={this.updateTodo}
+              deleteTodo={this.deleteTodo}
+            />
+          </div>
+          <FilterTodo changeStatus={this.changeStatus} />
         </div>
-        <FilterTodo changeStatus={this.changeStatus} />
-      </div>
+      </ErrorBoundary>
     );
   }
 }

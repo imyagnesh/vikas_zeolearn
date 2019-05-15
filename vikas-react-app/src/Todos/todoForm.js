@@ -1,4 +1,5 @@
 import React from "react";
+import wrapper from "../HOC/wrapper";
 
 const todoForm = ({ todoText, submit, onChange }) => {
   return (
@@ -9,4 +10,4 @@ const todoForm = ({ todoText, submit, onChange }) => {
   );
 };
 
-export default todoForm;
+export default wrapper(todoForm);

@@ -4,11 +4,6 @@
       "id": 1,
       "text": "get Milk",
       "isDone": true
-    },
-    {
-      "text": "get data",
-      "isDone": false,
-      "id": 2
     }
   ]
 }
