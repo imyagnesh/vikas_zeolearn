@@ -1,10 +1,14 @@
-import React, { Component } from "react";
+import React, { Component, StrictMode } from "react";
 import PropTypes from "prop-types";
-import Xyz from "./Todos";
+import Todos from "./Todos";
 
 export default class App extends Component {
   static propTypes = {
     prop: PropTypes
+  };
+
+  state = {
+    text: "get milk"
   };
 
   // state = {
@@ -31,9 +35,18 @@ export default class App extends Component {
     // const { a, greet, show } = this.state;
 
     return (
-      <div>
-        <Xyz />
-        {/* <p> {`Hello${this.state.a}`}</p>
+      <StrictMode>
+        <div>
+          {/* <button
+          onClick={() => {
+            this.setState({ text: "get food" });
+          }}
+        >
+          Change Text
+        </button> */}
+          <Todos text={this.state.text} />
+
+          {/* <p> {`Hello${this.state.a}`}</p>
         {show && <p> {greet}</p>}
         <button onClick={() => this.setState({ a: a + 1 })}>Click Me</button>
         <button
@@ -43,7 +56,8 @@ export default class App extends Component {
         >
           Show Text
         </button> */}
-      </div>
+        </div>
+      </StrictMode>
     );
   }
 }
