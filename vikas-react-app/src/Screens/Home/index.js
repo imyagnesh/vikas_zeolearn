@@ -3,26 +3,48 @@ import React, { PureComponent } from "react";
 export default class index extends PureComponent {
   state = {
     courses: [],
-    authors: []
+    authors: [],
+    loading: false,
+    error: false
   };
 
-  constructor(props) {
-    super(props);
-    this.fetchCourses();
-    this.fetchAuthors();
+  // constructor(props) {
+  //   super(props);
+  //   // this.fetchData();
+  //   // this.fetchCourses();
+  //   // this.fetchAuthors();
+  // }
+
+  componentDidMount() {
+    this.fetchData();
   }
 
-  fetchCourses = async () => {
-    const res = await fetch("http://localhost:3004/courses");
-    const courses = await res.json();
-    this.setState({ courses });
+  fetchData = async () => {
+    this.setState({ loading: true });
+    try {
+      setTimeout(async () => {
+        const resCourses = fetch("http://localhost:3004/courses");
+        const resAuthors = fetch("http://localhost:3004/authors");
+        const data = await Promise.all([resCourses, resAuthors]);
+        const json = await Promise.all([data[0].json(), data[1].json()]);
+        this.setState({ courses: json[0], authors: json[1], loading: false });
+      }, 1000);
+    } catch (error) {
+      this.setState({ error: error, loading: false });
+    }
   };
 
-  fetchAuthors = async () => {
-    const res = await fetch("http://localhost:3004/authors");
-    const authors = await res.json();
-    this.setState({ authors });
-  };
+  // fetchCourses = async () => {
+  //   const res = await fetch("http://localhost:3004/courses");
+  //   const courses = await res.json();
+  //   this.setState({ courses });
+  // };
+
+  // fetchAuthors = async () => {
+  //   const res = await fetch("http://localhost:3004/authors");
+  //   const authors = await res.json();
+  //   this.setState({ authors });
+  // };
 
   renderAuthorName = id => {
     const { authors } = this.state;
@@ -33,10 +55,26 @@ export default class index extends PureComponent {
     return "";
   };
 
+  addRecord = () => {
+    console.log(this.props);
+    const { history } = this.props;
+    history.push("/about", {
+      data: "hello"
+    });
+  };
+
   render() {
-    const { authors, courses } = this.state;
+    const { authors, courses, loading, error } = this.state;
+
+    if (loading) {
+      return <h1>Loading....</h1>;
+    }
+    if (error) {
+      return <h1>Error....</h1>;
+    }
     return (
       <div>
+        <button onClick={this.addRecord}>Add Record</button>
         <table>
           <thead>
             <tr>
@@ -51,7 +89,7 @@ export default class index extends PureComponent {
             {courses &&
               courses.length > 0 &&
               courses.map(course => (
-                <tr>
+                <tr key={course.id}>
                   <td>{course.title}</td>
                   <td>
                     <a href={course.watchHref}>Click Here</a>
