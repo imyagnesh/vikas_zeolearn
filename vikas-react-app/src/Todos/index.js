@@ -1,21 +1,22 @@
-import React, { PureComponent } from "react";
-import PropTypes from "prop-types";
-import TodoForm from "./todoForm";
-import TodoList from "./todoList";
-import FilterTodo from "./filterTodo";
-import ErrorBoundary from "../ErrorBoundary";
+/* eslint-disable */
+import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
+import TodoForm from './todoForm';
+import TodoList from './todoList';
+import FilterTodo from './filterTodo';
+import ErrorBoundary from '../ErrorBoundary';
 
 class index extends PureComponent {
   state = {
     todos: [],
-    todoText: "",
-    status: "all",
-    error: false
+    todoText: '',
+    status: 'all',
+    error: false,
   };
 
   constructor(props) {
     super(props);
-    console.log("constructor");
+    console.log('constructor');
     this.getData();
   }
 
@@ -73,7 +74,7 @@ class index extends PureComponent {
   componentWillMount() {}
 
   getData = async () => {
-    const res = await fetch("http://localhost:3004/todos");
+    const res = await fetch('http://localhost:3004/todos');
     const todos = await res.json();
     this.setState({ todos });
   };
@@ -88,20 +89,20 @@ class index extends PureComponent {
       const { todoText, todos } = this.state;
       const newTodo = { text: todoText, isDone: false };
 
-      const res = await fetch("http://localhost:3004/todos", {
-        method: "POST",
+      const res = await fetch('http://localhost:3004/todos', {
+        method: 'POST',
         body: JSON.stringify(newTodo),
         headers: {
-          accept: "application/json",
-          "Content-Type": "application/json"
-        }
+          accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
       });
 
       const todo = await res.json();
 
       this.setState({
         todos: [...todos, todo],
-        todoText: ""
+        todoText: '',
       });
     } catch (error) {
       console.log(error);
@@ -112,10 +113,10 @@ class index extends PureComponent {
     console.log(info);
     const { todos } = this.state;
     const res = await fetch(`http://localhost:3004/todos/${id}`, {
-      method: "DELETE"
+      method: 'DELETE',
     });
     this.setState({
-      todos: todos.filter(x => x.id !== id)
+      todos: todos.filter(x => x.id !== id),
     });
   };
 
@@ -126,21 +127,21 @@ class index extends PureComponent {
       const updatedTodo = { ...todos[index], isDone: !todos[index].isDone };
 
       const res = await fetch(`http://localhost:3004/todos/${id}`, {
-        method: "PUT",
+        method: 'PUT',
         body: JSON.stringify(updatedTodo),
         headers: {
-          accept: "application/json",
-          "Content-Type": "application/json"
-        }
+          accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
       });
 
       const todo = await res.json();
 
       this.setState({
-        todos: [...todos.slice(0, index), todo, ...todos.slice(index + 1)]
+        todos: [...todos.slice(0, index), todo, ...todos.slice(index + 1)],
       });
     } catch (error) {
-      new Error("Put API failed");
+      new Error('Put API failed');
     }
   };
 
@@ -149,14 +150,14 @@ class index extends PureComponent {
   };
 
   render() {
-    console.log("render");
+    console.log('render');
     const { todoText, todos, status } = this.state;
 
     let data = todos;
-    if (status === "pending") {
+    if (status === 'pending') {
       data = todos.filter(x => !x.isDone);
     }
-    if (status === "completed") {
+    if (status === 'completed') {
       data = todos.filter(x => x.isDone);
     }
 
@@ -165,10 +166,10 @@ class index extends PureComponent {
       <ErrorBoundary>
         <div
           style={{
-            height: "100vh",
-            flexDirection: "column",
-            display: "flex",
-            justifyContent: "flex-end"
+            height: '100vh',
+            flexDirection: 'column',
+            display: 'flex',
+            justifyContent: 'flex-end',
           }}
         >
           {/* <input
@@ -177,17 +178,9 @@ class index extends PureComponent {
           }}
           type="text"
         /> */}
-          <div style={{ display: "flex", flex: 1, flexDirection: "column" }}>
-            <TodoForm
-              todoText={todoText}
-              submit={this.submit}
-              onChange={this.onChange}
-            />
-            <TodoList
-              data={data}
-              updateTodo={this.updateTodo}
-              deleteTodo={this.deleteTodo}
-            />
+          <div style={{ display: 'flex', flex: 1, flexDirection: 'column' }}>
+            <TodoForm todoText={todoText} submit={this.submit} onChange={this.onChange} />
+            <TodoList data={data} updateTodo={this.updateTodo} deleteTodo={this.deleteTodo} />
           </div>
           <FilterTodo changeStatus={this.changeStatus} />
         </div>

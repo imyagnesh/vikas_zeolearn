@@ -48,18 +48,25 @@
       "authorId": "scott-allen"
     },
     {
-      "title": "title",
-      "courseURL": "www.google.com",
-      "length": "5:08",
-      "category": "react",
-      "id": "jvdDMB8"
+      "title": "final test",
+      "courseURL": "",
+      "length": "8:08",
+      "category": "edit things",
+      "country": "",
+      "state": "",
+      "watchHref": "www.google.com",
+      "id": "eDK7oB9"
     },
     {
-      "title": "react",
-      "courseURL": "adfads",
+      "title": "title 112",
+      "courseURL": "",
       "length": "2:08",
       "category": "Career adfadfad",
-      "id": "nMJwEnx"
+      "country": "",
+      "state": "",
+      "authorId": "dan-wahlin",
+      "watchHref": "http://www.pluralsight.com/courses/react-flux-building-applications",
+      "id": "uc064bR"
     }
   ],
   "authors": [

@@ -1,7 +1,7 @@
 const styles = {
   abc: {
-    color: "#61dafb"
-  }
+    color: '#61dafb',
+  },
 };
 
 export const a = 1;

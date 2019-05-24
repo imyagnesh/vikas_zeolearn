@@ -1,5 +1,5 @@
-import React from "react";
-import PropTypes from "prop-types";
+/* eslint-disable arrow-parens */
+import React from 'react';
 
 export default WrappedComponent => {
   const hocComponent = ({ ...props }) => (

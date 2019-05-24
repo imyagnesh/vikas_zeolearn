@@ -1,22 +1,23 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
+/* eslint-disable arrow-parens */
+import React, { Component } from 'react';
+// import PropTypes from 'prop-types';
 
 export default WrappedComponent => {
   class wrapper extends Component {
     componentDidMount() {
-      document.addEventListener("copy", this.copyData);
+      document.addEventListener('copy', this.copyData);
+    }
+
+    componentWillUnmount() {
+      document.removeEventListener('copy', this.copyData);
     }
 
     copyData = () => {
-      console.log("copied");
+      console.log('copied');
     };
 
-    componentWillUnmount() {
-      document.removeEventListener("copy", this.copyData);
-    }
-
     logData = () => {
-      console.log("logData");
+      console.log('logData');
     };
 
     render() {
