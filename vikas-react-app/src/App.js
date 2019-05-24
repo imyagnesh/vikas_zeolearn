@@ -1,6 +1,21 @@
 import React, { Component, StrictMode } from "react";
 import PropTypes from "prop-types";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import loadable from "@loadable/component";
+import NoMatch from "./Screens/NoMatch";
+import Header from "./Components/Header";
+import Footer from "./Components/Footer";
 import Todos from "./Todos";
+
+const HomeAsync = loadable(() => import("./Screens/Home"), {
+  fallback: <div>Loading...</div>
+});
+const UsersAsync = loadable(() => import("./Screens/Users"), {
+  fallback: <div>Loading...</div>
+});
+const AboutAsync = loadable(() => import("./Screens/About"), {
+  fallback: <div>Loading...</div>
+});
 
 export default class App extends Component {
   static propTypes = {
@@ -36,27 +51,27 @@ export default class App extends Component {
 
     return (
       <StrictMode>
-        <div>
-          {/* <button
-          onClick={() => {
-            this.setState({ text: "get food" });
-          }}
-        >
-          Change Text
-        </button> */}
-          <Todos text={this.state.text} />
-
-          {/* <p> {`Hello${this.state.a}`}</p>
-        {show && <p> {greet}</p>}
-        <button onClick={() => this.setState({ a: a + 1 })}>Click Me</button>
-        <button
-          onClick={() => {
-            this.setState({ show: !show });
-          }}
-        >
-          Show Text
-        </button> */}
-        </div>
+        <Router>
+          <div
+            style={{
+              height: "100vh",
+              flex: 1,
+              flexDirection: "column",
+              display: "flex"
+            }}
+          >
+            <Header />
+            <main style={{ flex: 1 }}>
+              <Switch>
+                <Route path="/" exact component={HomeAsync} />
+                <Route path="/about/" component={AboutAsync} />
+                <Route path="/users/" component={UsersAsync} />
+                <Route component={NoMatch} />
+              </Switch>
+            </main>
+            <Footer />
+          </div>
+        </Router>
       </StrictMode>
     );
   }
