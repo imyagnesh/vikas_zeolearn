@@ -1,14 +1,18 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 class ErrorBoundary extends Component {
-  state = {
-    hasError: false
+  static propTypes = {
+    children: PropTypes.element.isRequired,
   };
 
-  static getDerivedStateFromError(error) {
+  state = {
+    hasError: false,
+  };
+
+  static getDerivedStateFromError() {
     return {
-      hasError: true
+      hasError: true,
     };
   }
 

@@ -1,124 +1,130 @@
-import React, { PureComponent } from "react";
-import { Formik, Field } from "formik";
+import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
+import { Formik, Field } from 'formik';
+import InputComponent from './InputComponent';
+import SelectComponent from './selectComponent';
 
 const formJson = [
   {
-    name: "title",
-    title: "Title"
+    name: 'title',
+    title: 'Title',
+    placeholder: 'Title',
   },
   {
-    name: "courseURL",
-    title: "Course URL"
+    name: 'watchHref',
+    title: 'Course URL',
+    placeholder: 'Course URL',
   },
   {
-    name: "length",
-    title: "Length"
+    name: 'authorId',
+    title: 'Author',
+    placeholder: 'Select Author',
+    type: 'select',
   },
   {
-    name: "category",
-    title: "Category"
-  }
+    name: 'length',
+    placeholder: 'Length',
+    title: 'Length',
+  },
+  {
+    name: 'category',
+    placeholder: 'Category',
+    title: 'Category',
+  },
 ];
 
-const CustomInputComponent = ({
-  field, // { name, value, onChange, onBlur }
-  form: { touched, errors }, // also values, setXXXX, handleXXXX, dirty, isValid, status, etc.
-  ...props
-}) => (
-  <div style={{ display: "flex", flexDirection: "column" }}>
-    <label htmlFor={field.name}>{props.label}</label>
-    <input type="text" {...field} {...props} />
-    {touched[field.name] && errors[field.name] && (
-      <div className="error">{errors[field.name]}</div>
-    )}
-  </div>
-);
-
 export default class index extends PureComponent {
-  // state = {
-  //   title: "",
-  //   courseURL: "",
-  //   length: "",
-  //   category: ""
-  // };
-
-  // changeText = e => {
-  //   this.setState({ [e.target.name]: e.target.value });
-  // };
+  static propTypes = {
+    history: PropTypes.object.isRequired,
+    location: PropTypes.object.isRequired,
+  };
 
   submit = async (values, actions) => {
     console.log(actions);
     // actions.setErrors({ title: "Title is already exist" });
     try {
-      const res = await fetch("http://localhost:3004/courses", {
-        method: "POST",
-        body: JSON.stringify(values),
-        headers: {
-          accept: "application/json",
-          "Content-Type": "application/json"
-        }
-      });
+      let res = null;
+      if (values.id) {
+        res = await fetch(`http://localhost:3004/courses/${values.id}`, {
+          method: 'PUT',
+          body: JSON.stringify(values),
+          headers: {
+            accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+        });
+      } else {
+        res = await fetch('http://localhost:3004/courses', {
+          method: 'POST',
+          body: JSON.stringify(values),
+          headers: {
+            accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+        });
+      }
       const course = await res.json();
-      console.log(course);
       const { history } = this.props;
-      history.push("/", { course });
+      history.push('/', { course });
     } catch (error) {
       actions.setErrors({ general: error.message });
     }
   };
 
   render() {
+    const {
+      history,
+      location: { state },
+    } = this.props;
     return (
       <div>
-        <button onClick={() => this.props.history.goBack()}>Back</button>
-        <h1>Add Courses</h1>
+        <button type="button" onClick={() => history.goBack()}>
+          Back
+        </button>
+        <h1>{`${state.course.id ? 'Edit' : 'Add'} Course`}</h1>
         <Formik
-          initialValues={{
-            title: "",
-            courseURL: "",
-            length: "",
-            category: "",
-            country: "",
-            state: ""
-          }}
+          initialValues={state.course}
           validate={values => {
-            let errors = {};
+            const errors = {};
             if (!values.title) {
-              errors.title = "Required";
+              errors.title = 'Required';
             }
             return errors;
           }}
           onSubmit={this.submit}
         >
-          {({
-            values,
-            errors,
-            touched,
-            handleChange,
-            handleBlur,
-            handleSubmit,
-            isSubmitting
-          }) => {
-            return (
-              <form onSubmit={handleSubmit}>
-                <span>{!!errors.general && errors.general}</span>
-                {formJson.map(item => (
+          {({ isSubmitting, handleSubmit, errors }) => (
+            <form onSubmit={handleSubmit}>
+              <span>{!!errors.general && errors.general}</span>
+              {formJson.map(item => {
+                let options = {};
+                if (item.type === 'select') {
+                  const authors = state.authors.map(x => ({
+                    value: x.id,
+                    text: `${x.firstName} ${x.lastName}`,
+                  }));
+                  options = {
+                    options: authors,
+                  };
+                }
+                return (
                   <Field
                     key={item.name}
                     name={item.name}
                     label={item.title}
-                    component={CustomInputComponent}
+                    placeholder={item.placeholder}
+                    {...options}
+                    component={item.type === 'select' ? SelectComponent : InputComponent}
                   />
-                ))}
-
-                <input
-                  type="submit"
-                  value="Add Course"
-                  disabled={isSubmitting}
-                />
-              </form>
-            );
-          }}
+                );
+              })}
+              <input
+                type="submit"
+                value={`${state.course.id ? 'Edit' : 'Add'} Course`}
+                disabled={isSubmitting}
+              />
+            </form>
+          )}
         </Formik>
       </div>
     );

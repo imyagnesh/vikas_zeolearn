@@ -1,29 +1,29 @@
-import React, { Component, StrictMode } from "react";
-import PropTypes from "prop-types";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import loadable from "@loadable/component";
-import NoMatch from "./Screens/NoMatch";
-import Header from "./Components/Header";
-import Footer from "./Components/Footer";
-import Todos from "./Todos";
+import React, { Component, StrictMode } from 'react';
+// import PropTypes from 'prop-types';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import loadable from '@loadable/component';
+import NoMatch from './Screens/NoMatch';
+import Header from './Components/Header';
+import Footer from './Components/Footer';
+// import Todos from './Todos';
 
-const HomeAsync = loadable(() => import("./Screens/Home"), {
-  fallback: <div>Loading...</div>
+const HomeAsync = loadable(() => import('./Screens/Home'), {
+  fallback: <div>Loading...</div>,
 });
-const UsersAsync = loadable(() => import("./Screens/Users"), {
-  fallback: <div>Loading...</div>
+const UsersAsync = loadable(() => import('./Screens/Users'), {
+  fallback: <div>Loading...</div>,
 });
-const AboutAsync = loadable(() => import("./Screens/About"), {
-  fallback: <div>Loading...</div>
+const AboutAsync = loadable(() => import('./Screens/About'), {
+  fallback: <div>Loading...</div>,
 });
 
 export default class App extends Component {
   static propTypes = {
-    prop: PropTypes
+    // prop: PropTypes,
   };
 
   state = {
-    text: "get milk"
+    // text: 'get milk',
   };
 
   // state = {
@@ -54,10 +54,10 @@ export default class App extends Component {
         <Router>
           <div
             style={{
-              height: "100vh",
+              height: '100vh',
               flex: 1,
-              flexDirection: "column",
-              display: "flex"
+              flexDirection: 'column',
+              display: 'flex',
             }}
           >
             <Header />
