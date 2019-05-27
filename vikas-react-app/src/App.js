@@ -1,11 +1,14 @@
-import React, { Component, StrictMode } from 'react';
+import React, { Component, StrictMode, createContext } from 'react';
 // import PropTypes from 'prop-types';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import loadable from '@loadable/component';
 import NoMatch from './Screens/NoMatch';
 import Header from './Components/Header';
 import Footer from './Components/Footer';
+import LocaleContext from './ContextApis/localeContext';
 // import Todos from './Todos';
+
+export const { Consumer: ThemeConsumer, Provider: ThemeProvider } = createContext('light');
 
 const HomeAsync = loadable(() => import('./Screens/Home'), {
   fallback: <div>Loading...</div>,
@@ -51,27 +54,31 @@ export default class App extends Component {
 
     return (
       <StrictMode>
-        <Router>
-          <div
-            style={{
-              height: '100vh',
-              flex: 1,
-              flexDirection: 'column',
-              display: 'flex',
-            }}
-          >
-            <Header />
-            <main style={{ flex: 1 }}>
-              <Switch>
-                <Route path="/" exact component={HomeAsync} />
-                <Route path="/about/" component={AboutAsync} />
-                <Route path="/users/" component={UsersAsync} />
-                <Route component={NoMatch} />
-              </Switch>
-            </main>
-            <Footer />
-          </div>
-        </Router>
+        <LocaleContext>
+          <ThemeProvider value="dark">
+            <Router>
+              <div
+                style={{
+                  height: '100vh',
+                  flex: 1,
+                  flexDirection: 'column',
+                  display: 'flex',
+                }}
+              >
+                <Header />
+                <main style={{ flex: 1 }}>
+                  <Switch>
+                    <Route path="/" exact component={HomeAsync} />
+                    <Route path="/about/" component={AboutAsync} />
+                    <Route path="/users/" component={UsersAsync} />
+                    <Route component={NoMatch} />
+                  </Switch>
+                </main>
+                <Footer />
+              </div>
+            </Router>
+          </ThemeProvider>
+        </LocaleContext>
       </StrictMode>
     );
   }
