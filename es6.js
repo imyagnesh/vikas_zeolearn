@@ -451,7 +451,18 @@ console.log(myMap.size);
   
   
   
-  
+const add = (a, b) => a + b;
+const sub = (a, b) => a - b;
+const divide = (a, b) => a/b;
+const multiply = (a, b) => a * b
+
+const calc = (a, b) => { 
+    return (func) => {
+       return func(a,b)
+    }
+};
+
+console.log(calc(1,2)(multiply))
   
   
   

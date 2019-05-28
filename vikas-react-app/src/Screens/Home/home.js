@@ -1,10 +1,12 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { ThemeConsumer } from '../../App';
+import About from '../About/about';
+// import { ThemeConsumer } from '../../App';
 
 export default class index extends PureComponent {
   static propTypes = {
-    history: PropTypes.object.isRequired,
+    saveCourses: PropTypes.func.isRequired,
+    deleteCourses: PropTypes.func.isRequired,
     fetchAuthors: PropTypes.func.isRequired,
     fetchCourses: PropTypes.func.isRequired,
     courses: PropTypes.object.isRequired,
@@ -13,7 +15,15 @@ export default class index extends PureComponent {
 
   state = {
     courses: [],
-    authors: [],
+    course: {
+      title: '',
+      courseURL: '',
+      length: '',
+      category: '',
+      country: '',
+      state: '',
+    },
+    open: false,
   };
 
   constructor(props) {
@@ -22,33 +32,6 @@ export default class index extends PureComponent {
     fetchAuthors();
     fetchCourses();
   }
-
-  //   fetchData = async () => {
-  //     this.setState({ loading: true });
-  //     try {
-  //       setTimeout(async () => {
-  //         const resCourses = fetch('http://localhost:3004/courses');
-  //         const resAuthors = fetch('http://localhost:3004/authors');
-  //         const data = await Promise.all([resCourses, resAuthors]);
-  //         const json = await Promise.all([data[0].json(), data[1].json()]);
-  //         this.setState({ courses: json[0], authors: json[1], loading: false });
-  //       }, 1000);
-  //     } catch (error) {
-  //       this.setState({ error, loading: false });
-  //     }
-  //   };
-
-  // fetchCourses = async () => {
-  //   const res = await fetch("http://localhost:3004/courses");
-  //   const courses = await res.json();
-  //   this.setState({ courses });
-  // };
-
-  // fetchAuthors = async () => {
-  //   const res = await fetch("http://localhost:3004/authors");
-  //   const authors = await res.json();
-  //   this.setState({ authors });
-  // };
 
   renderAuthorName = id => {
     const {
@@ -62,10 +45,7 @@ export default class index extends PureComponent {
   };
 
   addRecord = () => {
-    console.log(this.props);
-    const { history } = this.props;
-    const { authors } = this.state;
-    history.push('/about', {
+    this.setState({
       course: {
         title: '',
         courseURL: '',
@@ -74,17 +54,39 @@ export default class index extends PureComponent {
         country: '',
         state: '',
       },
-      authors,
+      open: true,
     });
+    // console.log(this.props);
+    // const {
+    //   history,
+    //   authors: { data },
+    // } = this.props;
+    // history.push('/about', {
+    //   course: {
+    //     title: '',
+    //     courseURL: '',
+    //     length: '',
+    //     category: '',
+    //     country: '',
+    //     state: '',
+    //   },
+    //   authors: data,
+    // });
   };
 
   editRecord = course => {
-    const { history } = this.props;
-    const { authors } = this.state;
-    history.push('/about', {
+    this.setState({
       course,
-      authors,
+      open: true,
     });
+    // const {
+    //   history,
+    //   authors: { data },
+    // } = this.props;
+    // history.push('/about', {
+    //   course,
+    //   authors: data,
+    // });
   };
 
   deleteRecord = async course => {
@@ -103,7 +105,11 @@ export default class index extends PureComponent {
   render() {
     const {
       courses: { loading, data, error },
+      authors: { data: authorsData },
+      saveCourses,
+      deleteCourses,
     } = this.props;
+    const { course: crs, open } = this.state;
     if (loading) {
       return <h1>Loading....</h1>;
     }
@@ -113,13 +119,17 @@ export default class index extends PureComponent {
 
     return (
       <div>
-        <ThemeConsumer>
+        {/* <ThemeConsumer>
           {value => (
             <button type="button" onClick={this.addRecord}>
               {value}
             </button>
           )}
-        </ThemeConsumer>
+        </ThemeConsumer> */}
+
+        <button type="button" onClick={this.addRecord}>
+          Add Button
+        </button>
         <table>
           <thead>
             <tr>
@@ -145,7 +155,7 @@ export default class index extends PureComponent {
                   <button type="button" onClick={() => this.editRecord(course)}>
                     Edit
                   </button>
-                  <button type="button" onClick={() => this.deleteRecord(course)}>
+                  <button type="button" onClick={() => deleteCourses(course)}>
                     Delete
                   </button>
                 </td>
@@ -153,7 +163,46 @@ export default class index extends PureComponent {
             ))}
           </tbody>
         </table>
+        {crs && open && (
+          <dialog open>
+            <About
+              onClose={() => {
+                this.setState({ open: false });
+              }}
+              course={crs}
+              saveAuthors={saveCourses}
+              authorsData={authorsData}
+            />
+          </dialog>
+        )}
       </div>
     );
   }
 }
+
+//   fetchData = async () => {
+//     this.setState({ loading: true });
+//     try {
+//       setTimeout(async () => {
+//         const resCourses = fetch('http://localhost:3004/courses');
+//         const resAuthors = fetch('http://localhost:3004/authors');
+//         const data = await Promise.all([resCourses, resAuthors]);
+//         const json = await Promise.all([data[0].json(), data[1].json()]);
+//         this.setState({ courses: json[0], authors: json[1], loading: false });
+//       }, 1000);
+//     } catch (error) {
+//       this.setState({ error, loading: false });
+//     }
+//   };
+
+// fetchCourses = async () => {
+//   const res = await fetch("http://localhost:3004/courses");
+//   const courses = await res.json();
+//   this.setState({ courses });
+// };
+
+// fetchAuthors = async () => {
+//   const res = await fetch("http://localhost:3004/authors");
+//   const authors = await res.json();
+//   this.setState({ authors });
+// };

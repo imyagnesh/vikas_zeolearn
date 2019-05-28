@@ -2,6 +2,7 @@
 import { all, takeEvery, call, put } from 'redux-saga/effects';
 
 function* getAuthors() {
+  console.log('getAuthors');
   try {
     const url = 'http://localhost:3004/authors';
     const res = yield call(fetch, url);
