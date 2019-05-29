@@ -1,6 +1,9 @@
+/* eslint-disable object-curly-newline */
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import About from '../About/about';
+import ErrorBoundary from '../../Components/ErrorBoundary';
+import CourseList from './courseList';
 // import { ThemeConsumer } from '../../App';
 
 export default class index extends PureComponent {
@@ -9,8 +12,10 @@ export default class index extends PureComponent {
     deleteCourses: PropTypes.func.isRequired,
     fetchAuthors: PropTypes.func.isRequired,
     fetchCourses: PropTypes.func.isRequired,
-    courses: PropTypes.object.isRequired,
-    authors: PropTypes.object.isRequired,
+    courses: PropTypes.array.isRequired,
+    authors: PropTypes.array.isRequired,
+    loading: PropTypes.bool.isRequired,
+    editCourse: PropTypes.func.isRequired,
   };
 
   state = {
@@ -34,10 +39,8 @@ export default class index extends PureComponent {
   }
 
   renderAuthorName = id => {
-    const {
-      authors: { data },
-    } = this.props;
-    const author = data.find(x => x.id === id);
+    const { authors } = this.props;
+    const author = authors.find(x => x.id === id);
     if (author) {
       return `${author.firstName} ${author.lastName}`;
     }
@@ -103,23 +106,19 @@ export default class index extends PureComponent {
   };
 
   render() {
-    const {
-      courses: { loading, data, error },
-      authors: { data: authorsData },
-      saveCourses,
-      deleteCourses,
-    } = this.props;
+    const { courses, authors, saveCourses, deleteCourses, loading, editCourse } = this.props;
     const { course: crs, open } = this.state;
     if (loading) {
       return <h1>Loading....</h1>;
     }
-    if (error) {
-      return <h1>Error....</h1>;
-    }
+    // if (error) {
+    //   return <h1>Error....</h1>;
+    // }
 
     return (
-      <div>
-        {/* <ThemeConsumer>
+      <ErrorBoundary>
+        <div>
+          {/* <ThemeConsumer>
           {value => (
             <button type="button" onClick={this.addRecord}>
               {value}
@@ -127,55 +126,29 @@ export default class index extends PureComponent {
           )}
         </ThemeConsumer> */}
 
-        <button type="button" onClick={this.addRecord}>
-          Add Button
-        </button>
-        <table>
-          <thead>
-            <tr>
-              <th>Title</th>
-              <th>URL</th>
-              <th>Author</th>
-              <th>Length</th>
-              <th>Category</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.map(course => (
-              <tr key={course.id}>
-                <td>{course.title}</td>
-                <td>
-                  <a href={course.watchHref}>Click Here</a>
-                </td>
-                <td>{this.renderAuthorName(course.authorId)}</td>
-                <td>{course.length}</td>
-                <td>{course.category}</td>
-                <td>
-                  <button type="button" onClick={() => this.editRecord(course)}>
-                    Edit
-                  </button>
-                  <button type="button" onClick={() => deleteCourses(course)}>
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        {crs && open && (
-          <dialog open>
-            <About
-              onClose={() => {
-                this.setState({ open: false });
-              }}
-              course={crs}
-              saveAuthors={saveCourses}
-              authorsData={authorsData}
-            />
-          </dialog>
-        )}
-      </div>
+          <button type="button" onClick={this.addRecord}>
+            Add Button
+          </button>
+          <CourseList
+            courses={courses}
+            deleteCourses={deleteCourses}
+            editRecord={this.editRecord}
+            renderAuthorName={this.renderAuthorName}
+          />
+          {crs && open && (
+            <dialog open>
+              <About
+                onClose={() => {
+                  this.setState({ open: false });
+                }}
+                course={crs}
+                saveAuthors={value => (value.id ? editCourse(value) : saveCourses(value))}
+                authorsData={authors}
+              />
+            </dialog>
+          )}
+        </div>
+      </ErrorBoundary>
     );
   }
 }

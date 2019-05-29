@@ -8,20 +8,37 @@
   ],
   "courses": [
     {
-      "id": "clean-code",
-      "title": "Clean Code: Writing Code for Humans",
-      "watchHref": "http://www.pluralsight.com/courses/writing-clean-code-humans",
-      "authorId": "cory-house",
-      "length": "3:10",
-      "category": "Software Practices"
+      "title": "title",
+      "courseURL": "",
+      "length": "5:08",
+      "category": "react",
+      "country": "",
+      "state": "",
+      "watchHref": "http://www.pluralsight com/courses/react-flux-building-applications",
+      "authorId": "dan-wahlin",
+      "id": "SmZG8VX"
     },
     {
-      "id": "architecture",
-      "title": "Edited Architecting Applications for the Real World",
-      "watchHref": "http://www.pluralsight.com/courses/architecting-applications-dotnet",
-      "authorId": "dan-wahlin",
-      "length": "2:52",
-      "category": "Software Architecture"
+      "title": "title",
+      "courseURL": "",
+      "length": "5:08",
+      "category": "react",
+      "country": "",
+      "state": "",
+      "watchHref": "http://www.pluralsight.com/courses/react-flux-building-applications",
+      "authorId": "scott-allen",
+      "id": "iSQQayB"
+    },
+    {
+      "title": "title",
+      "courseURL": "",
+      "length": "5:08",
+      "category": "react",
+      "country": "",
+      "state": "",
+      "watchHref": "www.google.com",
+      "authorId": "cory-house",
+      "id": "OPi86Ij"
     }
   ],
   "authors": [

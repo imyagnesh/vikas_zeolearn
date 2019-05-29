@@ -38,7 +38,7 @@ export default class index extends PureComponent {
     saveAuthors: PropTypes.func.isRequired,
     onClose: PropTypes.func.isRequired,
     course: PropTypes.object.isRequired,
-    authorsData: PropTypes.object.isRequired,
+    authorsData: PropTypes.array.isRequired,
   };
 
   submit = async (values, actions) => {

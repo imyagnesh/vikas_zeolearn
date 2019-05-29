@@ -1,20 +1,10 @@
-const initialState = {
-  loading: false,
-  data: [],
-  error: false,
-};
+const initialState = [];
 
 export default (state = initialState, { type, payload }) => {
   console.log(type);
   switch (type) {
-    case 'FETCH_AUTHORS_REQUEST':
-      return { ...state, loading: true };
-
     case 'FETCH_AUTHORS_SUCCESS':
-      return { ...state, loading: false, data: payload };
-
-    case 'FETCH_AUTHORS_FAIL':
-      return { ...state, loading: false, error: payload };
+      return payload;
 
     default:
       return state;

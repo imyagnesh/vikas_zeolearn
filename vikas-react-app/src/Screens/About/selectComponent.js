@@ -15,7 +15,9 @@ const SelectComponent = ({
     <select {...field} {...props}>
       <option value="">{placeholder}</option>
       {options.map(item => (
-        <option value={item.value}>{item.text}</option>
+        <option key={item.value} value={item.value}>
+          {item.text}
+        </option>
       ))}
     </select>
 
