@@ -25,10 +25,10 @@ const courseList = ({ courses, deleteCourses, editRecord, renderAuthorName }) =>
           <td>{course.length}</td>
           <td>{course.category}</td>
           <td>
-            <button type="button" onClick={() => editRecord(course)}>
+            <button type="button" id="edit" onClick={() => editRecord(course)}>
               Edit
             </button>
-            <button type="button" onClick={() => deleteCourses(course)}>
+            <button type="button" id="delete" onClick={() => deleteCourses(course)}>
               Delete
             </button>
           </td>

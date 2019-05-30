@@ -5,12 +5,13 @@ import CourseList from '../courseList';
 
 configure({ adapter: new Adapter() });
 
-const setup = () => {
+const setup = properties => {
   const props = {
     courses: [],
-    deleteCourses: () => {},
-    editRecord: () => {},
-    renderAuthorName: () => {},
+    deleteCourses: jest.fn(),
+    editRecord: jest.fn(),
+    renderAuthorName: jest.fn(),
+    ...properties,
   };
 
   const Wrapper = shallow(<CourseList {...props} />);
@@ -49,5 +50,35 @@ describe('Course List page testing', () => {
 
     const wrapper = shallow(<CourseList {...props1} />);
     expect(wrapper.find('table>tbody>tr').length).toBe(1);
+  });
+
+  it('check click event', () => {
+    const { Wrapper, props } = setup();
+
+    const props1 = {
+      ...props,
+      courses: [
+        {
+          title: 'title',
+          courseURL: '',
+          length: '5:08',
+          category: 'react',
+          country: '',
+          state: '',
+          watchHref: 'http://www.pluralsight com/courses/react-flux-building-applications',
+          authorId: 'dan-wahlin',
+          id: 'SmZG8VX',
+        },
+      ],
+    };
+
+    const wrapper = shallow(<CourseList {...props1} />);
+
+    const button = wrapper.find('#edit');
+    expect(button.exists()).toBe(true);
+    button.simulate('click');
+    button.simulate('click');
+    button.simulate('click');
+    expect(props1.editRecord.mock.calls.length).toBe(3);
   });
 });
